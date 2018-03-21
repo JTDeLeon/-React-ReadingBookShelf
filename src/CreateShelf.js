@@ -3,6 +3,14 @@ import './App.css';
 
 class CreateShelf extends Component {
 
+  state = {
+    value: ''
+  }
+
+  updateState = (state)=>{
+    this.setState({ value: state });
+  }
+
   render(){
     return (
       <li className="customBook">
@@ -12,12 +20,23 @@ class CreateShelf extends Component {
             <div className="book-top">
               <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.bookCoverURL})` }}></div>
               <div className="book-shelf-changer">
-                <select>
-                  <option value="none" disabled>Move to...</option>
-                  <option value="currentlyReading">Currently Reading</option>
-                  <option value="wantToRead">Want to Read</option>
-                  <option value="read">Read</option>
-                  <option value="none">None</option>
+                <select
+                  onChange={(e)=>{
+                    console.log("The state value is ",this.state.value);
+                    this.setState({value:e.target.value},()=>{
+                      console.log(book.name);
+                      console.log("The state value is ",this.state.value);
+                      this.props.onUpdateShelf(book.name,this.state.value);
+                    });
+                  }
+                  }
+                  value={book.shelf}
+                >
+                    <option value="none" disabled>Move to...</option>
+                    <option value="currentlyReading">Currently Reading</option>
+                    <option value="wantToRead">Want to Read</option>
+                    <option value="read">Read</option>
+                    <option value="none">None</option>
                 </select>
               </div>
             </div>

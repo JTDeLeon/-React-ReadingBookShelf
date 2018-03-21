@@ -47,6 +47,16 @@ class ListBooks extends Component {
     ]
   }
 
+  updateShelf = (target,newShelf)=>{
+    this.setState(this.state.bookShelf.map((book)=>{
+        if(book.name === target){
+          book.shelf = newShelf;
+        }
+
+      })
+    )}
+
+
   render(){
     return (
       <div className="list-books">
@@ -63,6 +73,9 @@ class ListBooks extends Component {
                   <CreateShelf
                     books={this.state.bookShelf}
                     categoryShelf='currentlyReading'
+                    onUpdateShelf={(target,newShelf)=>{
+                      this.updateShelf(target,newShelf);
+                    }}
                   />
 
                 </ol>
@@ -76,6 +89,9 @@ class ListBooks extends Component {
                   <CreateShelf
                     books={this.state.bookShelf}
                     categoryShelf='wantToRead'
+                    onUpdateShelf={(target,newShelf)=>{
+                      this.updateShelf(target,newShelf);
+                    }}
                   />
 
                 </ol>
@@ -88,6 +104,9 @@ class ListBooks extends Component {
                   <CreateShelf
                     books={this.state.bookShelf}
                     categoryShelf='read'
+                    onUpdateShelf={(target,newShelf)=>{
+                      this.updateShelf(target,newShelf);
+                    }}
                   />
 
                 </ol>
