@@ -172,3 +172,10 @@ body, .app {
   text-align: center;
   font-size: 0.8em;
 }
+
+
+/* Custom Added CSS */
+.customBook {
+  display: flex;
+  margin: 0 30px;
+}
