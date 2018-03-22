@@ -13,6 +13,18 @@ class SearchBooks extends Component {
     query: ''
   }
 
+  updateShelf = (target,newShelf)=>{
+    // this.setState(this.props.bookShelf.map((book)=>{
+    //     if(book.id === target.id){
+    //       book.shelf = newShelf;
+    //     }
+    //
+    //   })
+    // )
+    //Updates the books in the server
+    BooksAPI.update(target,newShelf);
+  }
+
   searchForBook = (query) => {
     BooksAPI.search(query).then(books => {
       this.setState({ books:[]});
@@ -40,8 +52,12 @@ class SearchBooks extends Component {
   //TODO: COMPLETE : Breaks when a query search is not found!!!!
   //TODO COMPLETE : Breaks when query is deleted and a new query is made .. mixes this up
   //TODO COMPLETE : continues to rerender and loop
-  //TODO: Make space (2 word) searching available
-  //TODO: Make it possible to view books even with a missing thumbnail
+  //TODO: COMPLETE Make space (2 word) searching available
+  //TODO: COMPLETE Make it possible to view books even with a missing thumbnail
+  //TODO: Be able to add the book to the bookshelf from the main page with the appropriate state. ( TODO NEED TO HANDLE THE ADDING TO CURRENTLY READIN SECTION )
+    //TODO COMPLETE Auto Route & Refetch the books for List Books When a book has been selected
+    //TODO Set the default shelf for none on the books that are searched for
+      //TODO the shelf should be persistent throughout the app from books on the current bookshelf
   render(){
     // let showingContacts;
     // if(this.state.query){
@@ -69,7 +85,12 @@ class SearchBooks extends Component {
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <Link className="close-search" to="/">Close</Link>
+          <Link
+            className="close-search" to="/"
+            onClick={(event)=>{
+              this.props.onRefreshBookShelf();
+            }}
+          >Close</Link>
           <div className="search-books-input-wrapper">
             {/*
               NOTES: The search from BooksAPI is limited to a particular set of search terms.
@@ -127,10 +148,18 @@ class SearchBooks extends Component {
           <div className="search-books-results">
             <ol className="books-grid">
                 {console.log('Passing into CreateShelf',this.state.books)}
-              <CreateShelf
-                books={this.state.books}
-                // onSearchForBook={this.searchForBook(this.state.query)}
-              />
+              {this.state.books.length > 0 && (
+
+                <CreateShelf
+                  books={this.state.books}
+                  setCategory='none'
+                  onUpdateShelf={(target,newShelf)=>{
+                    this.updateShelf(target,newShelf);
+                  }}
+                  bookShelf={this.props.bookShelf}
+                />
+                )
+              }
             </ol>
           </div>
         </div>

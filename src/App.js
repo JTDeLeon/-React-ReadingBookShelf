@@ -11,18 +11,27 @@ class BooksApp extends React.Component {
     books: []
   }
 
+  refreshBookShelf = ()=>{
+    BooksAPI.getAll().then(books => {
+      this.setState({ books: books });
+    })
+  }
+
   componentDidMount() {
-  BooksAPI.getAll().then(books => {
-    this.setState({ books: books });
-  })
-}
+    BooksAPI.getAll().then(books => {
+      this.setState({ books: books });
+    })
+  }
 
   render() {
 
     return (
       <div className="app">
         <Route path="/search" render={()=>(
-          <SearchBooks />
+          <SearchBooks
+            onRefreshBookShelf={this.refreshBookShelf}
+            bookShelf={this.state.books}
+          />
         )}/>
 
         <Route exact path="/" render={()=>(

@@ -178,4 +178,5 @@ body, .app {
 .customBook {
   display: flex;
   margin: 0 30px;
+  flex-wrap: wrap;
 }
