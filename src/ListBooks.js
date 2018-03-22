@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { Link } from 'react-router-dom';
 import CreateShelf from './CreateShelf';
+import * as BooksAPI from './BooksAPI';
 
 class ListBooks extends Component {
 
@@ -48,13 +49,16 @@ class ListBooks extends Component {
   }
 
   updateShelf = (target,newShelf)=>{
-    this.setState(this.state.bookShelf.map((book)=>{
-        if(book.name === target){
+    this.setState(this.props.bookShelf.map((book)=>{
+        if(book.id === target.id){
           book.shelf = newShelf;
         }
 
       })
-    )}
+    )
+    //Updates the books in the server
+    BooksAPI.update(target,newShelf);
+  }
 
 
   render(){
@@ -71,7 +75,7 @@ class ListBooks extends Component {
                 <ol className="books-grid">
 
                   <CreateShelf
-                    books={this.state.bookShelf}
+                    books={this.props.bookShelf}
                     categoryShelf='currentlyReading'
                     onUpdateShelf={(target,newShelf)=>{
                       this.updateShelf(target,newShelf);
@@ -87,7 +91,7 @@ class ListBooks extends Component {
                 <ol className="books-grid">
 
                   <CreateShelf
-                    books={this.state.bookShelf}
+                    books={this.props.bookShelf}
                     categoryShelf='wantToRead'
                     onUpdateShelf={(target,newShelf)=>{
                       this.updateShelf(target,newShelf);
@@ -102,7 +106,7 @@ class ListBooks extends Component {
               <div className="bookshelf-books">
                 <ol className="books-grid">
                   <CreateShelf
-                    books={this.state.bookShelf}
+                    books={this.props.bookShelf}
                     categoryShelf='read'
                     onUpdateShelf={(target,newShelf)=>{
                       this.updateShelf(target,newShelf);

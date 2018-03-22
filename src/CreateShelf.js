@@ -15,18 +15,18 @@ class CreateShelf extends Component {
     return (
       <li className="customBook">
       {this.props.books.filter((book)=>book.shelf === this.props.categoryShelf).map((book)=>(
-        <div key={book.name}>
+        <div key={book.title}>
           <div className="book">
             <div className="book-top">
-              <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.bookCoverURL})` }}></div>
+              <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
               <div className="book-shelf-changer">
                 <select
                   onChange={(e)=>{
                     console.log("The state value is ",this.state.value);
                     this.setState({value:e.target.value},()=>{
-                      console.log(book.name);
+                      console.log(book.title);
                       console.log("The state value is ",this.state.value);
-                      this.props.onUpdateShelf(book.name,this.state.value);
+                      this.props.onUpdateShelf(book,this.state.value);
                     });
                   }
                   }
@@ -40,8 +40,8 @@ class CreateShelf extends Component {
                 </select>
               </div>
             </div>
-            <div className="book-title">{book.name}</div>
-            <div className="book-authors">{book.author}</div>
+            <div className="book-title">{book.title}</div>
+            <div className="book-authors">{book.authors[0]}</div>
           </div>
         </div>
       ))}
