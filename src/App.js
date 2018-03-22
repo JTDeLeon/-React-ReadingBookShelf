@@ -18,8 +18,7 @@ class BooksApp extends React.Component {
 }
 
   render() {
-    BooksAPI.search('R').then((response)=>console.log(response))
-    
+
     return (
       <div className="app">
         <Route path="/search" render={()=>(

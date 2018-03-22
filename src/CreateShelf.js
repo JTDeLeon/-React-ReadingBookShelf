@@ -15,10 +15,26 @@ class CreateShelf extends Component {
     return (
       <li className="customBook">
       {this.props.books.filter((book)=>book.shelf === this.props.categoryShelf).map((book)=>(
-        <div key={book.title}>
+        <div key={book.id}>
           <div className="book">
             <div className="book-top">
-              <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
+              {/* The following conditionals allow to check if thumbnail image is or is not available */}
+              {book.imageLinks && (
+                <div
+                  className="book-cover"
+                  style={{ width: 128, height: 193, backgroundImage:`url(${book.imageLinks.thumbnail})`}}
+                >
+                </div>
+              )}
+              {!book.imageLinks && (
+                <div
+                  className="book-cover"
+                  style={{ width: 128, height: 193, backgroundImage:`url()`}}
+                >
+                </div>
+              )}
+
+
               <div className="book-shelf-changer">
                 <select
                   onChange={(e)=>{
@@ -41,7 +57,7 @@ class CreateShelf extends Component {
               </div>
             </div>
             <div className="book-title">{book.title}</div>
-            <div className="book-authors">{book.authors[0]}</div>
+            <div className="book-authors">{book.authors}</div>
           </div>
         </div>
       ))}
