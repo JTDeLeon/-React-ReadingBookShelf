@@ -4,7 +4,7 @@ import './App.css';
 class CreateShelf extends Component {
 
   state = {
-    value: 'none',
+    value: ''
   }
 
   updateState = (state)=>{
@@ -64,7 +64,7 @@ class CreateShelf extends Component {
           ))
         }
 
-
+    {/* This is the section where searchedShelf books will run to create a shelf */}
     {!this.props.categoryShelf &&
       this.props.books.map((book)=>(
 
@@ -87,8 +87,6 @@ class CreateShelf extends Component {
                 >
                 </div>
               )}
-
-              {book.shelf = 'None'}
 
               <div className="book-shelf-changer">
                 <select

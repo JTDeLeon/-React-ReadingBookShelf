@@ -11,20 +11,20 @@ class BooksApp extends React.Component {
     books: []
   }
 
+  //Updates the current shelf based on changes made in other areas of the application (i.e. SearchBooks.js)
   refreshBookShelf = ()=>{
     BooksAPI.getAll().then(books => {
-      this.setState({ books: books });
+      this.setState({ books });
     })
   }
 
   componentDidMount() {
     BooksAPI.getAll().then(books => {
-      this.setState({ books: books });
+      this.setState({ books });
     })
   }
 
   render() {
-
     return (
       <div className="app">
         <Route path="/search" render={()=>(

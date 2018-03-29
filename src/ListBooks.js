@@ -14,7 +14,7 @@ class ListBooks extends Component {
           book.shelf = newShelf;
         }
 
-      })
+      return true})
     )
     //Updates the books in the server
     BooksAPI.update(target,newShelf);

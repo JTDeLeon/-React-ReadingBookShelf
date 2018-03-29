@@ -3,8 +3,6 @@ import './App.css';
 import { Link } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
 import CreateShelf from './CreateShelf'
-import escapeRegExp from 'escape-string-regexp'
-import sortBy from 'sort-by'
 
 class SearchBooks extends Component {
 
@@ -13,37 +11,64 @@ class SearchBooks extends Component {
     query: '',
   }
 
+  //Updates the current books state
   updateShelf = (target,newShelf)=>{
+    this.setState(this.props.bookShelf.map((book)=>{
+      if(book.id === target.id){
+        book.shelf = newShelf;
+      }
+      return true
+    })
+    )
+
     //Updates the books in the server
     BooksAPI.update(target,newShelf);
   }
 
+  //Adds the shelf property to the current search queried list if the book queried is also on the current bookshelves
+  testShelf = (searchedShelf) =>{
+    for(let i = 0; i<searchedShelf.length; i++){
+      for(let x = 0; x<this.props.bookShelf.length; x++){
+        //Checks the bookshelf & the searched book IDs
+        if(searchedShelf[i].id === this.props.bookShelf[x].id){
+          //Set the searched book shelf property if a match is found
+          searchedShelf[i].shelf = this.props.bookShelf[x].shelf;
+        }
+      }
+    }
+    //Return the updated Search Shelf
+    return searchedShelf;
+  }
+
+  //Sets the shelf property within a searched query to "None" when the book is not on the current bookshelf
+  setNone = (searchedShelf) => {
+    for(let i = 0; i<searchedShelf.length; i++){
+      if(searchedShelf[i].shelf === undefined){
+        searchedShelf[i].shelf = "None";
+      }
+    }
+    //Return the updated shelf
+    return searchedShelf;
+  }
+
+  //Queries the server for the queried string
   searchForBook = (query) => {
     BooksAPI.search(query).then(books => {
-
+      //Sets the books state with the new results
       this.setState({ books:[]});
       this.setState({ books: books });
     }).catch((err)=>{
       console.log('Book Not Found',err)
     })
-
   }
 
+  //Sets the query STATE
   updateQuery = (query)=>{
     this.setState({ query: query})
   }
 
-  clearQuery = ()=>{
-    this.setState({ query: '' });
-  }
 
-
-      //TODO the searched bookshelf dropdown should be showing the appropriate shelf the books on the current bookshelf are on
   render(){
-
-
-    const availSearchTerms = ['Android', 'Art', 'Artificial Intelligence', 'Astronomy', 'Austen', 'Baseball', 'Basketball', 'Bhagat', 'Biography', 'Brief', 'Business', 'Camus', 'Cervantes', 'Christie', 'Classics', 'Comics', 'Cook', 'Cricket', 'Cycling', 'Desai', 'Design', 'Development', 'Digital Marketing', 'Drama', 'Drawing', 'Dumas', 'Education', 'Everything', 'Fantasy', 'Film', 'Finance', 'First', 'Fitness', 'Football', 'Future', 'Games', 'Gandhi', 'Homer', 'Horror', 'Hugo', 'Ibsen', 'Journey', 'Kafka', 'King', 'Lahiri', 'Larsson', 'Learn', 'Literary Fiction', 'Make', 'Manage', 'Marquez', 'Money', 'Mystery', 'Negotiate', 'Painting', 'Philosophy', 'Photography', 'Poetry', 'Production', 'Programming', 'React', 'Redux', 'River', 'Robotics', 'Rowling', 'Satire', 'Science Fiction', 'Shakespeare', 'Singh', 'Swimming', 'Tale', 'Thrun', 'Time', 'Tolstoy', 'Travel', 'Ultimate', 'Virtual Reality', 'Web Development', 'iOS'
-];
 
     return (
       <div className="search-books">
@@ -62,20 +87,14 @@ class SearchBooks extends Component {
                 onChange={
                   (event)=>{
                     this.updateQuery(event.target.value)
-                    if(event.target.value){
-                      //Add a way to check if the words are listed in the array
-                      let count = 0;
-                      availSearchTerms.forEach((word)=>{
-                        const len = event.target.value.length;
+                    //Add a way to check if the words are listed in the array
 
-                        if(word.toLowerCase().substring(0,len) === event.target.value.toLowerCase()){
-                          this.searchForBook(event.target.value);
-                          count++;
-                        }
-                      })
+                    if(event.target.value){
+
+                      this.searchForBook(event.target.value);
+
                     }
                     else{
-                      console.log(">>>> THE QUERY IS EMPTY");
                       //Clears the showing books on empty query
                       this.setState({books:[]});
                     }
@@ -88,6 +107,12 @@ class SearchBooks extends Component {
           </div>
           <div className="search-books-results">
             <ol className="books-grid">
+
+              {/* These two lines will massage the data for the passed in queries where the shelves will be created */}
+              {console.log(this.testShelf(this.state.books))}
+              {console.log(this.setNone(this.state.books))}
+
+
               {this.state.books.length > 0 && (
                 <CreateShelf
                   books={this.state.books}
